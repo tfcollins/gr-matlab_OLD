@@ -23,7 +23,7 @@
 include(GrPlatform) #define LIB_SUFFIX
 
 include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIRS} "/home/travis/git/custom-blocks/gr-matlab/so/")
+link_directories(${Boost_LIBRARY_DIRS})
 
 list(APPEND matlab_sources
     fftmat_impl.cc
@@ -35,17 +35,12 @@ if(NOT matlab_sources)
 	return()
 endif(NOT matlab_sources)
 
-
-set(matlablib "/home/travis/git/custom-blocks/gr-matlab/so/libfft_from_matlab.so")
-
 add_library(gnuradio-matlab SHARED ${matlab_sources})
 
-MESSAGE(STATUS "${matlab_sources}")
-target_link_libraries(gnuradio-matlab ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${matlablib})
-set_target_properties(gnuradio-matlab PROPERTIES DEFINE_SYMBOL "gnuradio_matlab_EXPORTS")
-MESSAGE(STATUS "${GNURADIO_ALL_LIBRARIES}")
-MESSAGE(STATUS "${Boost_LIBRARIES}")
+set(matlablib ${CMAKE_SOURCE_DIR}/so/libfft_from_matlab.so)#added
 
+target_link_libraries(gnuradio-matlab ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${matlablib})#extended
+set_target_properties(gnuradio-matlab PROPERTIES DEFINE_SYMBOL "gnuradio_matlab_EXPORTS")
 
 if(APPLE)
     set_target_properties(gnuradio-matlab PROPERTIES
@@ -85,7 +80,7 @@ target_link_libraries(
   ${Boost_LIBRARIES}
   ${CPPUNIT_LIBRARIES}
   gnuradio-matlab
-  fft_from_matlab
+  fft_from_matlab #added
 )
 
 GR_ADD_TEST(test_matlab test-matlab)

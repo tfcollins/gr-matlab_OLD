@@ -34,27 +34,23 @@ class qa_fftmat (gr_unittest.TestCase):
         self.tb = None
 
     def test_001_t (self):
-	#src_data = gr.gr_complex(numpy.random.randn(64),numpy.random.randn(64));
 	fft_size = 64
 	src_data = numpy.random.randn(512)+numpy.random.randn(512)*1j;
-	#print src_data[0:63]
-	#src_data = (-3, 4, -5.5, 2, 3)
         expected_result = numpy.random.randn(512) + numpy.random.randn(512)*1j;
         src = blocks.vector_source_c(src_data)
 	s2v = blocks.stream_to_vector(gr.sizeof_gr_complex, fft_size)
         op = matlab.fftmat()
  	v2s = blocks.vector_to_stream(gr.sizeof_gr_complex, fft_size)
         dst = blocks.vector_sink_c()
-	print "STARTING11"
         self.tb.connect(src, s2v, op, v2s, dst)
-        #self.tb.run()
-        result_data = dst.data()
-	print "Done"
-        #self.assertFloatTuplesAlmostEqual(expected_result, result_data, 6)
 
 	# set up fg
         self.tb.run ()
         # check data
+        result_data = dst.data()
+	print src_data
+	print result_data
+        #self.assertFloatTuplesAlmostEqual(expected_result, result_data, 6)
 
 
 if __name__ == '__main__':

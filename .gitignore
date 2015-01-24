@@ -1,3 +1,4 @@
 codegen
 *.m~
 build
+*.swp
